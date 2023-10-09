@@ -1,5 +1,7 @@
 package com.example.flickrbrowserapp
 
+import android.location.Criteria
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import com.google.android.material.snackbar.Snackbar
@@ -11,6 +13,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
 import com.example.flickrbrowserapp.databinding.ActivityMainBinding
+import java.net.URL
 
 class MainActivity : AppCompatActivity(), GetRawData.OnDownloadComplete, GetFlickJsonData.OnDataAvailable {
 
@@ -31,10 +34,24 @@ class MainActivity : AppCompatActivity(), GetRawData.OnDownloadComplete, GetFlic
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
 
+        val url = createUri("https://api.flickr.com/services/feeds/photos_public.gne","android,oreo","en-us",true)
         val getRawData = GetRawData(this)
-        getRawData.execute("https://api.flickr.com/services/feeds/photos_public.gne?tags=android,oreo&format=json&nojsoncallback=1")
+        getRawData.execute(url)
 
         Log.d(TAG,"onCreate ends")
+    }
+
+    private fun createUri(baseURL: String, searchCriteria: String, lang: String, matchAll: Boolean): String {
+        Log.d(TAG,".createUri starts")
+
+        return Uri.parse(baseURL).
+        buildUpon().
+                appendQueryParameter("tags",searchCriteria).
+                appendQueryParameter("tagmode",if (matchAll) "ALL" else "ANY").
+                appendQueryParameter("lang",lang).
+                appendQueryParameter("format","json").
+                appendQueryParameter("nojsoncallback","1").
+                build().toString()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
