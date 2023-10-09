@@ -31,6 +31,9 @@ class MainActivity : AppCompatActivity() {
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
 
+        val getRawData = GetRawData()
+        getRawData.execute("https://api.flickr.com/services/feeds/photos_public.gne?tags=android,oreo&format=json&nojsoncallback=1")
+
 //        binding.fab.setOnClickListener { view ->
 //            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
 //                .setAction("Action", null).show()
@@ -65,4 +68,12 @@ class MainActivity : AppCompatActivity() {
 //    companion object {
 //        private const val TAG = "MainActivity"
 //    }
+
+    fun onDownloadComplete(data: String, status: DownloadStatus) {
+        if (status == DownloadStatus.OK) {
+            Log.d(TAG,"onDownloadComplete called, data is $data")
+        } else {
+            Log.d(TAG,"onDownloadComplete failed with status $status. Error message is $data")
+        }
+    }
 }
