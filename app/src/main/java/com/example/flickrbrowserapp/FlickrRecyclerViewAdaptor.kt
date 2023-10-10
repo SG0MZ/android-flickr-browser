@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
 
 class FlickrImageViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     var thumbnail: ImageView = view.findViewById(R.id.thumbnail)
@@ -29,13 +30,19 @@ class FlickrRecyclerViewAdaptor(private var photoList: List<Photo>) : RecyclerVi
         return if (photoList.isNotEmpty()) photoList[position] else null
     }
 
+    override fun onBindViewHolder(holder: FlickrImageViewHolder, position: Int) {
+        val photoItem = photoList[position]
+        Log.d(TAG,"onBindViewHolder: ${photoItem.title} -> $position")
+        Picasso.with(holder.thumbnail.context).load(photoItem.image)
+            .error(R.drawable.placeholder)
+            .placeholder(R.drawable.placeholder)
+            .into(holder.thumbnail)
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FlickrImageViewHolder {
         Log.d(TAG,".onCreateViewHolder new view requested")
         val view = LayoutInflater.from(parent.context).inflate(R.layout.browser,parent,false)
         return FlickrImageViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: FlickrImageViewHolder, position: Int) {
-        TODO("Not yet implemented")
-    }
 }
