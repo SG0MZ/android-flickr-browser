@@ -8,6 +8,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.flickrbrowserapp.databinding.ActivityPhotoDetailsBinding
+import com.squareup.picasso.Picasso
 
 class PhotoDetailsActivity : BaseActivity() {
 
@@ -22,6 +23,16 @@ class PhotoDetailsActivity : BaseActivity() {
 
         activateToolbar(true)
 
+        val photo = intent.getSerializableExtra(PHOTO_TRANSFER) as Photo
+
+        photo_title.text = photo.title
+        photo_tags.text = photo.tags
+        photo_author.text = photo.author
+
+        Picasso.with(this.thumbnail.context).load(photo.link)
+            .error(R.drawable.placeholder)
+            .placeholder(R.drawable.placeholder)
+            .into(photo_image)
     }
 
     override fun onSupportNavigateUp(): Boolean {
