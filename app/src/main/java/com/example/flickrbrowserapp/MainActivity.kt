@@ -12,11 +12,16 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.flickrbrowserapp.databinding.ActivityMainBinding
 import java.net.URL
 
-class MainActivity : AppCompatActivity(), GetRawData.OnDownloadComplete, GetFlickJsonData.OnDataAvailable {
+class MainActivity : AppCompatActivity(),
+    GetRawData.OnDownloadComplete,
+    GetFlickJsonData.OnDataAvailable,
+    RecyclerItemClickListener.OnRecyclerClickListener {
 
     private val TAG = "MainActivity"
     private lateinit var appBarConfiguration: AppBarConfiguration
@@ -34,6 +39,7 @@ class MainActivity : AppCompatActivity(), GetRawData.OnDownloadComplete, GetFlic
 //        setSupportActionBar(binding.toolbar)
 
         recycler_view.layoutManager = LinearLayoutManager(this)
+        recycler_view.addOnItemTouchListener(RecyclerItemClickListener(this,recycler_view,this))
         recycler_view.adapter = FlickrRecyclerViewAdaptor
 
         val navController = findNavController(R.id.nav_host_fragment_content_main)
@@ -45,6 +51,16 @@ class MainActivity : AppCompatActivity(), GetRawData.OnDownloadComplete, GetFlic
         getRawData.execute(url)
 
         Log.d(TAG,"onCreate ends")
+    }
+
+    override fun onItemClick(view: View, position: Int) {
+        Log.d(TAG,".onItemClick: starts")
+        Toast.makeText(this,"Normal tap at position $position",Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onItemLongClick(view: View, position: Int) {
+        Log.d(TAG,".onItemLongClick: starts")
+        Toast.makeText(this,"Long tap at position $position",Toast.LENGTH_LONG).show()
     }
 
     private fun createUri(baseURL: String, searchCriteria: String, lang: String, matchAll: Boolean): String {
