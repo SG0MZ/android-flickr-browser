@@ -12,6 +12,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.flickrbrowserapp.databinding.ActivityMainBinding
 import java.net.URL
 
@@ -21,6 +22,8 @@ class MainActivity : AppCompatActivity(), GetRawData.OnDownloadComplete, GetFlic
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
 
+    private val FlickrRecyclerViewAdaptor = FlickrRecyclerViewAdaptor(ArrayList())
+
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(TAG,"onCreate called")
         super.onCreate(savedInstanceState)
@@ -29,6 +32,9 @@ class MainActivity : AppCompatActivity(), GetRawData.OnDownloadComplete, GetFlic
         setContentView(binding.root)
 
 //        setSupportActionBar(binding.toolbar)
+
+        recycler_view.layoutManager = LinearLayoutManager(this)
+        recycler_view.adapter = FlickrRecyclerViewAdaptor
 
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         appBarConfiguration = AppBarConfiguration(navController.graph)
@@ -95,6 +101,7 @@ class MainActivity : AppCompatActivity(), GetRawData.OnDownloadComplete, GetFlic
 
     override fun onDataAvailable(data: List<Photo>) {
         Log.d(TAG,"onDataAvailable called, data is $data")
+        flickrReclyclerViewAdapter.loadNewData(data)
         Log.d(TAG,"onDataAvailable ends")
     }
 
