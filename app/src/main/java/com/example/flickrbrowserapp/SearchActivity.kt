@@ -3,6 +3,7 @@ package com.example.flickrbrowserapp
 import android.app.SearchManager
 import android.content.Context
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.util.Log
 import android.view.Menu
 import com.google.android.material.snackbar.Snackbar
@@ -51,16 +52,28 @@ class SearchActivity : BaseActivity() {
 //        Log.d(TAG,".onCreateOptionsMenu: $searchableInfo")
 
         searchView?.isIconified = false
-        searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener) {
+
+        searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?):Boolean {
                 Log.d(TAG,".onCreateOptionsMenu: called")
+
+                val sharedPref = PreferenceManager.getDefaultSharedPreferences(applicationContext)
+                sharedPref.edit().putString(FLICKR_QUERY,query).apply()
+                searchView?.clearFocus()
+
                 finish()
                 return true
             }
             override fun onQueryTextChange(newText: String?): Boolean {
                 return false
             }
+        })
+
+        searchView?.setOnCloseListener {
+            finish()
+            false
         }
+
         Log.d(TAG,".onCreateOptionsMenu: returning")
         return true
     }

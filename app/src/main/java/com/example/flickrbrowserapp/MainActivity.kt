@@ -4,6 +4,7 @@ import android.content.Intent
 import android.location.Criteria
 import android.net.Uri
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.util.Log
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
@@ -48,9 +49,7 @@ class MainActivity : BaseActivity(),
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
 
-        val url = createUri("https://api.flickr.com/services/feeds/photos_public.gne","android,oreo","en-us",true)
-        val getRawData = GetRawData(this)
-        getRawData.execute(url)
+
 
         Log.d(TAG,"onCreate ends")
     }
@@ -139,5 +138,15 @@ class MainActivity : BaseActivity(),
     override fun onResume() {
         Log.d(TAG,".onResume starts")
         super.onResume()
+
+        val sharedPref = PreferenceManager.getDefaultSharedPreferences(applicationContext)
+        val queryResult = sharedPref.getString(FLICKR_QUERY,"")
+
+        if (queryResult?.isNotEmpty() == true) {
+            val url = createUri("https://api.flickr.com/services/feeds/photos_public.gne",queryResult,"en-us",true)
+            val getRawData = GetRawData(this)
+            getRawData.execute(url)
+        }
+        Log.d(TAG,".onResume: ends")
     }
 }
