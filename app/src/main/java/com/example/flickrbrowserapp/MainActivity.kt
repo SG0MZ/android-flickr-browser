@@ -1,5 +1,6 @@
 package com.example.flickrbrowserapp
 
+import android.content.Intent
 import android.location.Criteria
 import android.net.Uri
 import android.os.Bundle
@@ -18,7 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.flickrbrowserapp.databinding.ActivityMainBinding
 import java.net.URL
 
-class MainActivity : AppCompatActivity(),
+class MainActivity : BaseActivity(),
     GetRawData.OnDownloadComplete,
     GetFlickJsonData.OnDataAvailable,
     RecyclerItemClickListener.OnRecyclerClickListener {
@@ -36,6 +37,7 @@ class MainActivity : AppCompatActivity(),
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        activateToolbar(false)
 //        setSupportActionBar(binding.toolbar)
 
         recycler_view.layoutManager = LinearLayoutManager(this)
@@ -60,7 +62,13 @@ class MainActivity : AppCompatActivity(),
 
     override fun onItemLongClick(view: View, position: Int) {
         Log.d(TAG,".onItemLongClick: starts")
-        Toast.makeText(this,"Long tap at position $position",Toast.LENGTH_LONG).show()
+//        Toast.makeText(this,"Long tap at position $position",Toast.LENGTH_LONG).show()
+        val photo = flickrRecyclerViewAdapter.getPhoto(position)
+        if (photo != null) {
+            val intent = Intent(this,PhotoDetailsActivity::class.java)
+            intent.putExtra(PHOTO_TRANSFER,photo)
+            startActivity(intent)
+        }
     }
 
     private fun createUri(baseURL: String, searchCriteria: String, lang: String, matchAll: Boolean): String {
