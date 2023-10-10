@@ -97,7 +97,10 @@ class MainActivity : BaseActivity(),
         // as you specify a parent activity in AndroidManifest.xml.
         Log.d(TAG,"onOptionsItemSelected called")
         return when (item.itemId) {
-            R.id.action_settings -> true
+            R.id.action_search -> {
+                startActivity(Intent(this,SearchActivity::class.java))
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -131,5 +134,10 @@ class MainActivity : BaseActivity(),
 
     override fun onError(exception: Exception) {
         Log.d(TAG,"onError zcalled with ${exception.message}")
+    }
+
+    override fun onResume() {
+        Log.d(TAG,".onResume starts")
+        super.onResume()
     }
 }
