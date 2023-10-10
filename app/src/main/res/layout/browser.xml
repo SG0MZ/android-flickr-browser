@@ -4,12 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/thumbnail"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
     <ImageView
         android:id="@+id/thumbnail"
-        android:layout_width="80dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
         android:scaleType="fitStart"
@@ -17,9 +16,11 @@
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="375dp"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="125dp"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:text="TextView" />
+        android:text="TextView"
+        tools:text="Empty Text View" />
+
 </LinearLayout>
